@@ -41,7 +41,7 @@ class Agent:
         
         self.buffer.push(transition)
             
-        
+
     def select_action(self, net, epsilon, device = 'cuda'):
         state = torch.Tensor(self.env.state()).to(device).view(1, -1)
         qvalues = net(state)

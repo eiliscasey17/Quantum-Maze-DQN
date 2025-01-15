@@ -42,6 +42,7 @@ class MazeEnvironment:
         # the agent makes an action from the following:
         # 1 -> right, 2 -> left
         # 3 -> down, 4 -> up
+        # 5 -> stay
         
     # introduce a reset policy, so that for high epsilon the initial
     # position is nearer to the goal (useful for large mazes)
