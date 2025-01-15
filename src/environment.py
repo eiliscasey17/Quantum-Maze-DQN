@@ -30,12 +30,14 @@ class MazeEnvironment:
         self.action_map = {0: [0, 1],
                            1: [0, -1],
                            2: [1, 0],
-                           3: [-1, 0]}
+                           3: [-1, 0],
+                           4: [0, 0]}
         
         self.directions = {0: '→',
                            1: '←',
                            2: '↓ ',
-                           3: '↑'}
+                           3: '↑',
+                           4: '⬤'}
         
         # the agent makes an action from the following:
         # 1 -> right, 2 -> left
@@ -83,6 +85,9 @@ class MazeEnvironment:
         else:
             if tuple(self.current_position) in self.visited:
                 reward = -0.2
+        
+        if (next_position == self.current_position).all():
+            reward = -0.1
         
         # if the moves goes out of the maze or to a wall, the
         # reward is -1
