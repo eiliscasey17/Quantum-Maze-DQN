@@ -24,7 +24,7 @@ class Agent:
         self.isgameon = True
 
         
-    def make_a_move(self, net, epsilon, device = 'cuda'):
+    def make_a_move(self, net, epsilon, device = 'cpu'):
         action = self.select_action(net, epsilon, device)
         current_state = self.env.state()
         next_state, reward, self.isgameon = self.env.state_update(action)
@@ -42,7 +42,7 @@ class Agent:
         self.buffer.push(transition)
             
 
-    def select_action(self, net, epsilon, device = 'cuda'):
+    def select_action(self, net, epsilon, device = 'cpu'):
         state = torch.Tensor(self.env.state()).to(device).view(1, -1)
         qvalues = net(state)
         qvalues = qvalues.detach().cpu().numpy()
@@ -79,7 +79,7 @@ class Agent:
 
             for free_cell in self.env.allowed_states:
                 self.env.current_position = np.asarray(free_cell)
-                qvalues = net(torch.Tensor(self.env.state()).view(1,-1).to('cuda'))
+                qvalues = net(torch.Tensor(self.env.state()).view(1,-1).to('cpu'))
                 action = int(torch.argmax(qvalues).detach().cpu().numpy())
                 policy = self.env.directions[action]
 

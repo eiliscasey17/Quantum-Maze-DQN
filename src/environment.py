@@ -30,14 +30,12 @@ class MazeEnvironment:
         self.action_map = {0: [0, 1],
                            1: [0, -1],
                            2: [1, 0],
-                           3: [-1, 0],
-                           4: [0, 0]}
+                           3: [-1, 0]}
         
         self.directions = {0: '→',
                            1: '←',
                            2: '↓ ',
-                           3: '↑',
-                           4: '⬤'}
+                           3: '↑'}
         
         # the agent makes an action from the following:
         # 1 -> right, 2 -> left
