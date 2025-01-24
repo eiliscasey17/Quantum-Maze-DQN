@@ -58,8 +58,10 @@ class Agent:
         else:
             if np.random.random() < epsilon:
                 action = np.random.randint(self.num_act, size=1)[0]
-            else:                
-                action = np.argmax(qvalues, axis=0)
+            else:
+                           
+                action = np.argmax(qvalues)
+             
                 action = int(action)
         
         return action
