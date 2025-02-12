@@ -14,7 +14,7 @@ Transition = collections.namedtuple('Experience',
 
 
 class Agent:
-    def __init__(self, maze, memory_buffer, use_softmax = True):
+    def __init__(self, maze, memory_buffer, agent_id, use_softmax = True):
         self.env = maze
         self.buffer = memory_buffer # this is actually a reference
         self.num_act = 4
@@ -23,9 +23,13 @@ class Agent:
         self.min_reward = -self.env.maze.size
         self.isgameon = True
 
+        self.agent_id = agent_id
+      
+
+
         
-    def make_a_move(self, net, epsilon, device = 'cpu'):
-        action = self.select_action(net, epsilon, device)
+    def make_a_move(self, qvalues, epsilon, device = 'cpu'):
+        action = self.select_action(qvalues, epsilon, device)
         current_state = self.env.state()
         next_state, reward, self.isgameon = self.env.state_update(action)
         self.total_reward += reward
@@ -42,9 +46,8 @@ class Agent:
         self.buffer.push(transition)
             
 
-    def select_action(self, net, epsilon, device = 'cpu'):
-        state = torch.Tensor(self.env.state()).to(device).view(1, -1)
-        qvalues = net(state)
+    def select_action(self, qvalues, epsilon, device = 'cpu'):
+        
         qvalues = qvalues.detach().cpu().numpy()
 
         # softmax sampling of the qvalues
@@ -58,10 +61,8 @@ class Agent:
         else:
             if np.random.random() < epsilon:
                 action = np.random.randint(self.num_act, size=1)[0]
-            else:
-                           
+            else:         
                 action = np.argmax(qvalues)
-             
                 action = int(action)
         
         return action
@@ -70,18 +71,20 @@ class Agent:
         # Save the model under the subfolder 'models'
         torch.save(net.state_dict(), filename)
     
-    def plot_policy_map(self, net, filename, offset):
+    def plot_policy_map(self, get_qvalues ,net, filename, offset):
         # Load the model
-        net = net.load_state_dict(torch.load(filename))
-        net.eval()
-        
+
         with torch.no_grad():
             fig, ax = plt.subplots()
             ax.imshow(self.env.maze, 'Greys')
 
             for free_cell in self.env.allowed_states:
-                self.env.current_position = np.asarray(free_cell)
-                qvalues = net(torch.Tensor(self.env.state()).view(1,-1).to('cpu'))
+                self.env.current_position = np.array(free_cell)
+                qvalues = 0
+                if self.agent_id == 'Start':
+                    qvalues, _ = get_qvalues(net, torch.Tensor(self.env.state()).view(1,-1).to('cpu'),torch.Tensor(self.env.state()).view(1,-1).to('cpu'))
+                else:
+                    _, qvalues = get_qvalues(net, torch.Tensor(self.env.state()).view(1,-1).to('cpu'),torch.Tensor(self.env.state()).view(1,-1).to('cpu'))
                 action = int(torch.argmax(qvalues).detach().cpu().numpy())
                 policy = self.env.directions[action]
 
@@ -95,3 +98,5 @@ class Agent:
             #        'bs', markersize = 4)
             plt.savefig(filename, dpi = 300, bbox_inches = 'tight')
             plt.show()
+
+ 

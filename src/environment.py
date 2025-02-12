@@ -31,12 +31,28 @@ class MazeEnvironment:
                            1: [0, -1],
                            2: [1, 0],
                            3: [-1, 0]}
-        
+       
+
         self.directions = {0: '→',
                            1: '←',
                            2: '↓ ',
                            3: '↑'}
         
+        '''
+        self.action_map = {0: [0, 1],
+                           1: [0, -1],
+                           2: [1, 0],
+                           3: [-1, 0],
+                           4: [0, 0]}
+
+        self.directions = {0: '→',
+                           1: '←',
+                           2: '↓ ',
+                           3: '↑',
+                           4: '.'}      
+        
+        '''
+
         # the agent makes an action from the following:
         # 1 -> right, 2 -> left
         # 3 -> down, 4 -> up
@@ -58,7 +74,7 @@ class MazeEnvironment:
             idx = np.random.choice(len(self.allowed_states), p = p)
 
         self.current_position = np.asarray(self.allowed_states[idx])
-        
+
         self.visited = set()
         self.visited.add(tuple(self.current_position))
 
@@ -85,9 +101,7 @@ class MazeEnvironment:
             if tuple(self.current_position) in self.visited:
                 reward = -0.2
         
-        if (next_position == self.current_position).all():
-            reward = -0.1
-        
+            
         # if the moves goes out of the maze or to a wall, the
         # reward is -1
         if self.is_state_valid(next_position):
@@ -101,6 +115,7 @@ class MazeEnvironment:
     # return the state to be feeded to the network
     def state(self):
         state = copy.deepcopy(self.maze)
+        #print(state)
         state[tuple(self.current_position)] = 2
         return state
         
