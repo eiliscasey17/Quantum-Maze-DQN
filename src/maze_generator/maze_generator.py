@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-mx = 10; my = 10 # width and height of the maze
+mx = 6; my = 6 # width and height of the maze
 
 maze = [[0 for x in range(mx)] for y in range(my)]
 print(maze)
@@ -58,4 +58,4 @@ maze = abs(maze)
 maze[0][0] = 0
 maze[mx-1][my-1] = 0
 
-np.save('maze_10x10', np.array(maze))
+np.save('maze_6x6', np.array(maze))

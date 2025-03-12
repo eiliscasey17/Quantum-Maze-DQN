@@ -38,20 +38,7 @@ class MazeEnvironment:
                            2: '↓ ',
                            3: '↑'}
         
-        '''
-        self.action_map = {0: [0, 1],
-                           1: [0, -1],
-                           2: [1, 0],
-                           3: [-1, 0],
-                           4: [0, 0]}
 
-        self.directions = {0: '→',
-                           1: '←',
-                           2: '↓ ',
-                           3: '↑',
-                           4: '.'}      
-        
-        '''
 
         # the agent makes an action from the following:
         # 1 -> right, 2 -> left
@@ -115,8 +102,9 @@ class MazeEnvironment:
     # return the state to be feeded to the network
     def state(self):
         state = copy.deepcopy(self.maze)
-        #print(state)
+        
         state[tuple(self.current_position)] = 2
+       
         return state
         
     
