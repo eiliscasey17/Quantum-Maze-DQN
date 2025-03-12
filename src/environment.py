@@ -48,6 +48,7 @@ class MazeEnvironment:
     # introduce a reset policy, so that for high epsilon the initial
     # position is nearer to the goal (useful for large mazes)
     def reset_policy(self, eps, reg = 7):
+        print(sp.softmax(-self.distances/(reg*(1-eps**(2/reg)))**(reg/2)).squeeze())
         return sp.softmax(-self.distances/(reg*(1-eps**(2/reg)))**(reg/2)).squeeze()
     
     # reset the environment when the game is completed
