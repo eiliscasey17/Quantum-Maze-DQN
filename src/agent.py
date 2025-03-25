@@ -28,10 +28,12 @@ class Agent:
 
 
         
-    def make_a_move(self, qvalues, epsilon, device = 'cpu'):
-        action = self.select_action(qvalues, epsilon, device)
+    def make_a_move(self, qvalues, epsilon, state_update, action, device = 'cpu'):
+        #action = self.select_action(qvalues, epsilon, device)
         current_state = self.env.state()
-        next_state, reward, self.isgameon = self.env.state_update(action)
+        #next_state, reward, self.isgameon = self.env.state_update(action)
+        next_state, reward, self.isgameon = state_update
+
         self.total_reward += reward
         
         if self.total_reward < self.min_reward:
