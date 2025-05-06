@@ -24,19 +24,25 @@ class MazeEnvironment:
                                          np.asarray(self.goal))**2,
                                          axis = 1))
         
-        del(self.allowed_states[np.where(self.distances == 0)[0][0]])
-        self.distances = np.delete(self.distances, np.where(self.distances == 0)[0][0])
+        self.index = np.where(self.distances == 0)[0][0]
+        self.saved  = self.allowed_states[self.index]
+
+        
+        #del(self.allowed_states[np.where(self.distances == 0)[0][0]])
+        #self.distances = np.delete(self.distances, np.where(self.distances == 0)[0][0])
                 
         self.action_map = {0: [0, 1],
                            1: [0, -1],
                            2: [1, 0],
-                           3: [-1, 0]}
+                           3: [-1, 0],
+                           4: [0,0]}
        
 
         self.directions = {0: '→',
                            1: '←',
                            2: '↓ ',
-                           3: '↑'}
+                           3: '↑',
+                           4: '.'}
         
 
 
@@ -54,6 +60,8 @@ class MazeEnvironment:
     # with probability prand the reset is random, otherwise
     # the reset policy at the given epsilon is used
     def reset(self, epsilon, prand = 0):
+
+        
         if np.random.rand() < prand:
             idx = np.random.choice(len(self.allowed_states))
         else:
@@ -66,6 +74,7 @@ class MazeEnvironment:
         print(self.current_position)
         self.visited = set()
         self.visited.add(tuple(self.current_position))
+
 
         return self.state()
     

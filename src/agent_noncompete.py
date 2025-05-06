@@ -17,7 +17,7 @@ class Agent:
     def __init__(self, maze, memory_buffer, use_softmax = True):
         self.env = maze
         self.buffer = memory_buffer # this is actually a reference
-        self.num_act = 4
+        self.num_act = 5
         self.use_softmax = use_softmax
         self.total_reward = 0
         self.min_reward = -self.env.maze.size
